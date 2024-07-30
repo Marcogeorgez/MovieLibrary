@@ -29,7 +29,7 @@ namespace HelloWorld.WinForms
                 {
                     Plot = txtPlot.Text,
                     Title = txtTitle.Text,
-                    DateWatched = dateTimePicker.Value,
+                    WatchedDate = dateTimePicker.Value,
                     Seen = movieSeen.Checked,
                 };
             if (Current == null)
@@ -60,7 +60,7 @@ namespace HelloWorld.WinForms
                 txtPlot.Text = Current.Plot;
                 txtTitle.Text = Current.Title;
                 movieSeen.Checked = Current.Seen;
-                dateTimePicker.Value = Current.DateWatched;
+                dateTimePicker.Value = Current.WatchedDate;
 
                 createButton.Text = "Update";
             }

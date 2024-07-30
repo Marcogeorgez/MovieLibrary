@@ -37,6 +37,9 @@
             createButton = new Button();
             txtPlot = new RichTextBox();
             txtTitle = new TextBox();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
             SuspendLayout();
             // 
             // label1
@@ -61,7 +64,7 @@
             // 
             // dateTimePicker
             // 
-            dateTimePicker.Location = new Point(164, 359);
+            dateTimePicker.Location = new Point(224, 358);
             dateTimePicker.Name = "dateTimePicker";
             dateTimePicker.Size = new Size(231, 23);
             dateTimePicker.TabIndex = 2;
@@ -115,24 +118,60 @@
             // 
             // txtPlot
             // 
-            txtPlot.Location = new Point(133, 103);
+            txtPlot.Location = new Point(133, 106);
             txtPlot.Name = "txtPlot";
-            txtPlot.Size = new Size(450, 137);
+            txtPlot.Size = new Size(450, 213);
             txtPlot.TabIndex = 8;
             txtPlot.Text = "";
             // 
             // txtTitle
             // 
-            txtTitle.Location = new Point(133, 56);
+            txtTitle.Location = new Point(133, 59);
             txtTitle.Name = "txtTitle";
             txtTitle.Size = new Size(450, 23);
             txtTitle.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.BackColor = Color.White;
+            label4.ForeColor = Color.FromArgb(192, 0, 0);
+            label4.Location = new Point(72, 62);
+            label4.Name = "label4";
+            label4.Size = new Size(55, 17);
+            label4.TabIndex = 10;
+            label4.Text = "Required";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.BackColor = Color.White;
+            label5.ForeColor = Color.FromArgb(192, 0, 0);
+            label5.Location = new Point(72, 106);
+            label5.Name = "label5";
+            label5.Size = new Size(55, 17);
+            label5.TabIndex = 11;
+            label5.Text = "Required";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.White;
+            label6.ForeColor = Color.FromArgb(192, 0, 0);
+            label6.Location = new Point(163, 363);
+            label6.Name = "label6";
+            label6.Size = new Size(55, 17);
+            label6.TabIndex = 12;
+            label6.Text = "Required";
             // 
             // NewMovie
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(684, 461);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
             Controls.Add(txtTitle);
             Controls.Add(txtPlot);
             Controls.Add(createButton);
@@ -160,5 +199,8 @@
         private Button createButton;
         private RichTextBox txtPlot;
         private TextBox txtTitle;
+        private Label label4;
+        private Label label5;
+        private Label label6;
     }
 }

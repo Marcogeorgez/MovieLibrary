@@ -11,7 +11,7 @@ namespace HelloWorld.Business.Models
     {
         public  int Id { get; set; }
         public required string Title { get; set; }
-        public required DateTime DateWatched { get; set; }
+        public required DateTime WatchedDate { get; set; }
         public bool Seen { get; set; }
         public  int? Rating { get; set; }
         public string? Plot { get; set; }
