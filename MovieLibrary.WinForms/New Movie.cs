@@ -25,13 +25,18 @@ namespace HelloWorld.WinForms
             MovieService movieService = new();
 
          
-                Movie movie = new()
+            Movie movie = new()
+            {
+                Plot = txtPlot.Text,
+                Title = txtTitle.Text,
+                WatchedDate = dateTimePicker.Value,
+                Seen = movieSeen.Checked,
+            };
+            if (!movie.Validate(out var validationMessage))
                 {
-                    Plot = txtPlot.Text,
-                    Title = txtTitle.Text,
-                    WatchedDate = dateTimePicker.Value,
-                    Seen = movieSeen.Checked,
-                };
+                MessageBox.Show(validationMessage);
+                return;
+                }
             if (Current == null)
             {
                 movieService.Create(movie);

@@ -1,9 +1,8 @@
 using HelloWorld.Business;
 using HelloWorld.Business.Models;
-using System.Diagnostics;
 
 namespace HelloWorld.WinForms
-{
+    {
     public partial class MainForm : Form
     {
         private MovieService movieService;

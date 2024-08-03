@@ -1,9 +1,9 @@
-# Movie Library App
+# Movie Library App Rework Using EF
 
 ## Overview
 
-The Movie Library App is a Windows Forms application developed using C# and ADO.NET.
-This self-learning project aims to reinforce concepts in C# programming, object-oriented design, and CRUD (Create, Read, Update, Delete) operations.
+The Movie Library App is a Windows Forms application developed using C# and Entity Framework.
+This self-learning project aims to reinforce concepts in C# programming, Object Relational Mapping (ORM), and CRUD (Create, Read, Update, Delete) operations.
 The application allows users to manage a personal movie library by performing various operations on movie entries.
 
 ## Features
@@ -16,13 +16,9 @@ The application allows users to manage a personal movie library by performing va
 ## Technologies Used
 
 - **C#**: The primary programming language used for the application logic.
-- **ADO.NET**: Used for data access and manipulation with the database.
+- **Entity Framework**: Used for data access and manipulation with the database.
 - **WinForms**: Provides the graphical user interface (GUI) for interacting with the movie library.
 
-
-## Reason to Learn ADO.Net:
-- Since Entity Framework is built on ADO.Net , many aspects including errors can be related to ADO.Net and therefore it is essential to know a knowledge about ADO .Net.
-- Reinforce Learning SQL in the meantime.
 
 
 ## Getting Started
