@@ -1,0 +1,6 @@
+@MovieLib.WebApplication_HostAddress = http://localhost:5179
+
+GET {{MovieLib.WebApplication_HostAddress}}/weatherforecast
+Accept: application/json
+
+###

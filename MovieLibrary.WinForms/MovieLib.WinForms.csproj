@@ -15,8 +15,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MovieLibrary.Business\MovieLib.Business.csproj" />
-  </ItemGroup>
-
 </Project>

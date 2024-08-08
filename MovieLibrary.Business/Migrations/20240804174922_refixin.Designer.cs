@@ -4,6 +4,7 @@ using HelloWorld.Business;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MovieLib.Business.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240804174922_refixin")]
+    partial class refixin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace MovieLib.Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genre");
+                    b.ToTable("GenresEF");
 
                     b.HasData(
                         new
@@ -74,11 +77,6 @@ namespace MovieLib.Business.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("GenreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<string>("Plot")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -99,17 +97,13 @@ namespace MovieLib.Business.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("Movies");
+                    b.ToTable("MoviesEF");
 
                     b.HasData(
                         new
                         {
                             Id = 2199,
-                            GenreId = 2,
                             Plot = "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
-                            Rating = 9,
                             Seen = false,
                             Title = "The Matrix",
                             WatchedDate = new DateTime(1999, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -117,24 +111,11 @@ namespace MovieLib.Business.Migrations
                         new
                         {
                             Id = 2209,
-                            GenreId = 3,
                             Plot = "78-year-old Carl Fredricksen travels to Paradise Falls in his house equipped with balloons, inadvertently taking a young stowaway.\r\n\r\n",
-                            Rating = 7,
                             Seen = false,
                             Title = "Up",
                             WatchedDate = new DateTime(2009, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("HelloWorld.Business.Models.Movie", b =>
-                {
-                    b.HasOne("HelloWorld.Business.Models.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }
