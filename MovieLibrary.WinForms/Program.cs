@@ -1,5 +1,5 @@
 namespace HelloWorld.WinForms
-{
+    {
     internal static class Program
     {
         /// <summary>
