@@ -1,34 +1,22 @@
-﻿using HelloWorld.Business.Models;
+﻿using MovieLib.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelloWorld.Business
     {
     public class DataContext : DbContext
         {
+		public DataContext(DbContextOptions<DataContext> options) : base(options)
+		{ 
 
-        public DbSet<Movie> Movies { get; set; }
+		}
+
+		public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genre { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            {
 
-            string connectionString = "Data Source=DESKTOP-HSDSJ4Q\\MSSQLSERVER01;" +
-            "Initial Catalog=Movies;" +
-            "Integrated Security=True;" +
-            "Connect Timeout=30;" +
-            "Encrypt=True;" +
-            "Trust Server Certificate=True;" +
-            "Application Intent=ReadWrite;" +
-            "Multi Subnet Failover=False";
-            optionsBuilder.UseSqlServer(connectionString);
-            optionsBuilder.AddInterceptors(new EFQueryInterceptor());   
-
-            }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
             modelBuilder.Entity<Movie>().Property(x => x.GenreId).HasDefaultValue(1); // To Fix the issue where GenreId has no value.
-
-
             modelBuilder.Entity<Movie>().HasData(new Movie()
                 {
                 Id = 2199,

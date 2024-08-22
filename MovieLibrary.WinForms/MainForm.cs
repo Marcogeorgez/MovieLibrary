@@ -1,4 +1,4 @@
-using MovieLib.WinForms;
+using MovieLib.Domain;
 using System.Text.Json;
 
 namespace HelloWorld.WinForms

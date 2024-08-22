@@ -1,4 +1,4 @@
-﻿using MovieLib.WinForms;
+﻿using MovieLib.Domain;
 using System.Text;
 using System.Text.Json;
 
@@ -22,7 +22,7 @@ namespace HelloWorld.WinForms
                 WatchedDate = dateTimePicker.Value,
                 Seen = movieSeen.Checked,
                 };
-            if (!movie.Validate(out var validationMessage))
+            if (!movie.Validate(out string validationMessage))
                 {
                 MessageBox.Show(validationMessage);
                 return;
