@@ -6,14 +6,7 @@ using MovieLib.Business;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(o => o.UseSqlServer("Data Source=DESKTOP-HSDSJ4Q\\MSSQLSERVER01;" +
-			"Initial Catalog=Movies;" +
-			"Integrated Security=True;" +
-			"Connect Timeout=30;" +
-			"Encrypt=True;" +
-			"Trust Server Certificate=True;" +
-			"Application Intent=ReadWrite;" +
-			"Multi Subnet Failover=False"), ServiceLifetime.Transient);
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 builder.Services.AddScoped<IMovieService, MovieService>();
 
 
