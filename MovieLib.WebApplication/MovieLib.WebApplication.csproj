@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>f7c17954-90ea-4f41-9be5-93c53ad93453</UserSecretsId>
+    <UserSecretsId>c5b621af-3b70-46af-85e9-9974a6791d49</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MovieLibrary.Business\MovieLib.Business.csproj" />
+    <ProjectReference Include="..\MovieLib.Business\MovieLib.Business.csproj" />
   </ItemGroup>
 
 </Project>
