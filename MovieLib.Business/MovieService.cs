@@ -7,15 +7,15 @@ namespace MovieLib.Business
 	public class MovieService : IMovieService
 	{
 
-		private DataContext dataContext;
+		private readonly DataContext _dataContext;
 		public MovieService(DataContext dataContext)
 		{
-			this.dataContext = dataContext;
+			_dataContext = dataContext;
 		}
 
 		public List<Movie> Get()
 		{
-			List<Movie> movies = dataContext.Movies.Include(x => x.Genre).ToList();
+			List<Movie> movies = _dataContext.Movies.Include(x => x.Genre).ToList();
 
 			return movies;
 		}
@@ -23,8 +23,8 @@ namespace MovieLib.Business
 
 		public void Create(Movie movie)
 		{
-			dataContext.Movies.Add(movie);
-			dataContext.SaveChanges();
+			_dataContext.Movies.Add(movie);
+			_dataContext.SaveChanges();
 
 		}
 		public void Create(MovieCreateDto moviee)
@@ -38,17 +38,17 @@ namespace MovieLib.Business
 				Rating = moviee.Rating
 
 			};
-			dataContext.Movies.Add(movie);
-			dataContext.SaveChanges();
+			_dataContext.Movies.Add(movie);
+			_dataContext.SaveChanges();
 
 		}
 		public void Delete(int id)
 		{
 
-			Movie? movieToDelete = dataContext.Movies.SingleOrDefault(x => x.Id == id)
+			Movie? movieToDelete = _dataContext.Movies.SingleOrDefault(x => x.Id == id)
 				?? throw new ArgumentException("Movie not found!");
-			dataContext.Remove(movieToDelete);
-			dataContext.SaveChanges();
+			_dataContext.Remove(movieToDelete);
+			_dataContext.SaveChanges();
 
 
 		}
@@ -59,13 +59,13 @@ namespace MovieLib.Business
 			{
 				throw new ArgumentException("Invalid movie ID", nameof(movie.Id));
 			}
-			Movie? movieToUpdate = dataContext.Movies.SingleOrDefault(x => x.Id == movie.Id)
+			Movie? movieToUpdate = _dataContext.Movies.SingleOrDefault(x => x.Id == movie.Id)
 				?? throw new ArgumentException("Doesn't Exist!");
 			movieToUpdate.Title = movie.Title;
 			movieToUpdate.Plot = movie.Plot;
 			movieToUpdate.WatchedDate = movie.WatchedDate;
 			movieToUpdate.Seen = movie.Seen;
-			dataContext.SaveChanges();
+			_dataContext.SaveChanges();
 
 		}
 

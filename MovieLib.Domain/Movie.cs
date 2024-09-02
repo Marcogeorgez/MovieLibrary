@@ -21,7 +21,7 @@ namespace MovieLib.Domain
 		[MinLength(3)]
 		[Required(ErrorMessage = "Title is required")]
 		public required string Title { get; set; }
-		public required DateTime WatchedDate { get; set; }
+		public  DateTime WatchedDate { get; set; }
 		public bool Seen { get; set; }
 		public int? Rating { get; set; }
 		[MaxLength(500)]

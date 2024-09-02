@@ -10,7 +10,8 @@ namespace MovieLib.Business
 
 		}
 
-		public DbSet<Movie> Movies { get; set; }
+
+		public virtual DbSet<Movie> Movies { get; set; }
 		public DbSet<Genre> Genre { get; set; }
 
 
