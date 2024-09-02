@@ -4,10 +4,9 @@ namespace MovieLib.Business.Interfaces
 {
     public interface IMovieService
     {
-        void Create(Movie movie);
-        void Create(MovieCreateDto moviee);
-        void Delete(int id);
-        List<Movie> Get();
-        void Update(Movie movie);
-    }
+		Task Create(MovieCreateDto moviee);
+		Task Delete(int id);
+		Task<List<Movie>> Get();
+		Task Update(Movie movie);
+	}
 }

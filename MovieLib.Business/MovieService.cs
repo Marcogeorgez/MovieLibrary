@@ -13,21 +13,14 @@ namespace MovieLib.Business
 			_dataContext = dataContext;
 		}
 
-		public List<Movie> Get()
+		public async Task<List<Movie>> Get()
 		{
-			List<Movie> movies = _dataContext.Movies.Include(x => x.Genre).ToList();
+			List<Movie> movies = await _dataContext.Movies.Include(x => x.Genre).ToListAsync();
 
 			return movies;
 		}
 
-
-		public void Create(Movie movie)
-		{
-			_dataContext.Movies.Add(movie);
-			_dataContext.SaveChanges();
-
-		}
-		public void Create(MovieCreateDto moviee)
+		public async Task Create(MovieCreateDto moviee)
 		{
 			var movie = new Movie()
 			{
@@ -39,33 +32,33 @@ namespace MovieLib.Business
 
 			};
 			_dataContext.Movies.Add(movie);
-			_dataContext.SaveChanges();
+			await _dataContext.SaveChangesAsync();
 
 		}
-		public void Delete(int id)
+		public async Task Delete(int id)
 		{
 
-			Movie? movieToDelete = _dataContext.Movies.SingleOrDefault(x => x.Id == id)
+			Movie? movieToDelete = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == id)
 				?? throw new ArgumentException("Movie not found!");
 			_dataContext.Remove(movieToDelete);
-			_dataContext.SaveChanges();
+			await _dataContext.SaveChangesAsync();
 
 
 		}
-		public void Update(Movie movie)
+		public async Task Update(Movie movie)
 		{
 
 			if (movie.Id <= 0)
 			{
 				throw new ArgumentException("Invalid movie ID", nameof(movie.Id));
 			}
-			Movie? movieToUpdate = _dataContext.Movies.SingleOrDefault(x => x.Id == movie.Id)
+			Movie? movieToUpdate = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == movie.Id)
 				?? throw new ArgumentException("Doesn't Exist!");
 			movieToUpdate.Title = movie.Title;
 			movieToUpdate.Plot = movie.Plot;
 			movieToUpdate.WatchedDate = movie.WatchedDate;
 			movieToUpdate.Seen = movie.Seen;
-			_dataContext.SaveChanges();
+			await _dataContext.SaveChangesAsync();
 
 		}
 
