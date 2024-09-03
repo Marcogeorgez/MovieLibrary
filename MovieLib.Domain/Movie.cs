@@ -11,6 +11,7 @@ namespace MovieLib.Domain
 		public required DateTime WatchedDate { get; set; }
 		public bool Seen { get; set; }
 		public int? Rating { get; set; }
+		public int GenreId { get; set; }
 	}
 
 	public class Movie

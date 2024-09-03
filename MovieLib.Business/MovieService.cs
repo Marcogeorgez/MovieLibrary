@@ -31,8 +31,8 @@ namespace MovieLib.Business
 					Plot = moviee.Plot,
 					WatchedDate = moviee.WatchedDate,
 					Seen = moviee.Seen,
-					Rating = moviee.Rating
-
+					Rating = moviee.Rating,
+					GenreId = moviee.GenreId
 				};
 				_dataContext.Movies.Add(movie);
 				await _dataContext.SaveChangesAsync();
