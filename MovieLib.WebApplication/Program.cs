@@ -4,11 +4,12 @@ using MovieLib.Business.Interfaces;
 using MovieLib.Business;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
-builder.Services.AddScoped<IMovieService, MovieService>();
-
+{
+	builder.Services.AddEndpointsApiExplorer();
+	builder.Services.AddSwaggerGen();
+	builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+	builder.Services.AddScoped<IMovieService, MovieService>();
+}
 
 var app = builder.Build();
 
@@ -20,9 +21,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/api/movies", (IMovieService movieService) =>
+app.MapGet("/api/movies", async (IMovieService movieService) =>
 {
-	List<Movie> movies = movieService.Get();
+	List<Movie> movies = await movieService.Get();
 	return Results.Ok(movies);
 });
 app.MapDelete("/api/movies/{id}", (IMovieService movieService, int id) =>
