@@ -18,6 +18,8 @@ namespace MovieLib.Business
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Movie>().Property(x => x.GenreId).HasDefaultValue(1); // To Fix the issue where GenreId has no value.
+			modelBuilder.Entity<Movie>().HasIndex(m => m.Title).IsUnique();
+
 			modelBuilder.Entity<Movie>().HasData(new Movie()
 			{
 				Id = 2199,
@@ -31,7 +33,7 @@ namespace MovieLib.Business
 			new()
 			{
 				Id = 2209,
-				Plot = "78-year-old Carl Fredricksen travels to Paradise Falls in his house equipped with balloons, inadvertently taking a young stowaway.\r\n\r\n",
+				Plot = "78-year-old Carl travels to Paradise Falls in his house equipped with balloons, inadvertently taking a young stowaway.\r\n\r\n",
 				WatchedDate = new DateTime(2009, 05, 29),
 				Seen = false,
 				Title = "Up",

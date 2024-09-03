@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MovieLib.Business.Interfaces;
 using MovieLib.Domain;
 
@@ -20,20 +21,31 @@ namespace MovieLib.Business
 			return movies;
 		}
 
-		public async Task Create(MovieCreateDto moviee)
+		public async Task<int> Create(MovieCreateDto moviee)
 		{
-			var movie = new Movie()
+			try
 			{
-				Title = moviee.Title,
-				Plot = moviee.Plot,
-				WatchedDate = moviee.WatchedDate,
-				Seen = moviee.Seen,
-				Rating = moviee.Rating
+				var movie = new Movie()
+				{
+					Title = moviee.Title,
+					Plot = moviee.Plot,
+					WatchedDate = moviee.WatchedDate,
+					Seen = moviee.Seen,
+					Rating = moviee.Rating
 
-			};
-			_dataContext.Movies.Add(movie);
-			await _dataContext.SaveChangesAsync();
-
+				};
+				_dataContext.Movies.Add(movie);
+				await _dataContext.SaveChangesAsync();
+				return 200;
+			}
+			catch (DbUpdateException ex)
+			{
+				if( ex.InnerException is SqlException sqlException && sqlException.Number == 2601)
+				{
+					return 400;
+				}
+				throw;
+			}
 		}
 		public async Task Delete(int id)
 		{
