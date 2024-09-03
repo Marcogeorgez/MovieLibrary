@@ -1,7 +1,7 @@
-using MovieLib.Domain;
 using Microsoft.EntityFrameworkCore;
-using MovieLib.Business.Interfaces;
 using MovieLib.Business;
+using MovieLib.Business.Interfaces;
+using MovieLib.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -21,25 +21,40 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDto movieDto) =>
+{
+	try
+	{
+		int results = await movieService.Create(movieDto);
+
+		return results switch
+		{
+			200 => Results.Created($"/api/movies/{movieDto}", movieDto),
+			400 => Results.BadRequest("A movie with similar name exists already!"),
+			_ => Results.StatusCode(500)
+		};
+
+	}
+	catch (Exception ex)
+	{
+		return Results.BadRequest($"Internal server error: {ex.Message}");
+	}
+});
 app.MapGet("/api/movies", async (IMovieService movieService) =>
 {
 	List<Movie> movies = await movieService.Get();
 	return Results.Ok(movies);
 });
-app.MapDelete("/api/movies/{id}", (IMovieService movieService, int id) =>
-{
-	movieService.Delete(id);
-	return Results.NoContent();
-});
-app.MapPost("/api/movies", (IMovieService movieService, MovieCreateDto movieDto) =>
-{
-	movieService.Create(movieDto);
-	return Results.NoContent();
-});
-app.MapPut("/api/movies/{id}", (IMovieService movieService, int id, Movie movie) =>
+app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, Movie movie) =>
 {
 	movie.Id = id;
-	movieService.Update(movie);
+	await movieService.Update(movie);
 	return Results.NoContent();
 });
+app.MapDelete("/api/movies/{id}", async (IMovieService movieService, int id) =>
+{
+	await movieService.Delete(id);
+	return Results.NoContent();
+});
+
 app.Run();
