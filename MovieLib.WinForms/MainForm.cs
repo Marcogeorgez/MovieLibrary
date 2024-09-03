@@ -7,7 +7,7 @@ namespace MovieLib.WinForms
 {
 	public partial class MainForm : Form
 	{
-		string url = ConfigurationManager.AppSettings["ApiBaseUrl"];
+		string url = ConfigurationManager.AppSettings["ApiBaseUrl"]!;
         public string Url { get => this.url; }
 
 		public MainForm()
@@ -16,7 +16,7 @@ namespace MovieLib.WinForms
 		}
 		private void LoadMovie()
 		{
-			List<Movie> movies = new();
+			List<Movie> movies = [];
 			using (HttpClient client = new())
 			{
 				HttpResponseMessage response = client.GetAsync(Url).Result;
@@ -62,9 +62,11 @@ namespace MovieLib.WinForms
 			if (MovieList.SelectedItem != null)
 			{
 				Movie selected = (Movie) MovieList.SelectedItem;
-				NewMovie newMovie = new();
-				newMovie.Current = selected;
-				newMovie.StartPosition = FormStartPosition.CenterParent;
+				NewMovie newMovie = new()
+				{
+					Current = selected,
+					StartPosition = FormStartPosition.CenterParent
+				};
 				DialogResult result = newMovie.ShowDialog();
 				if (result == DialogResult.OK)
 					LoadMovie();

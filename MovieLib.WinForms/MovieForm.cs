@@ -6,6 +6,8 @@ namespace MovieLib.WinForms
 {
 	public partial class NewMovie : Form
 	{
+		readonly string baseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"]!;
+
 		public Movie Current { get; set; }
 		public NewMovie()
 		{
@@ -28,8 +30,12 @@ namespace MovieLib.WinForms
 				return;
 			}
 			string jsonData = JsonSerializer.Serialize(movie);
+
 			StringContent content = new(jsonData, Encoding.UTF8, "application/json");
-			string Url = Current == null ? "https://localhost:7065/api/movies" : $"https://localhost:7065/api/movies/{movie.Id}";
+
+			string Url = Current == null ? baseUrl : $"{baseUrl}/{movie.Id}";
+
+
 			using (HttpClient client = new())
 			{
 				HttpResponseMessage? response;
