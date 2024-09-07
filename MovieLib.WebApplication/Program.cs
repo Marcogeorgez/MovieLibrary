@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieLib.Business;
 using MovieLib.Business.Interfaces;
+using MovieLib.Business.Mapping;
 using MovieLib.Domain;
 using MovieLib.WebApplication.Middleware;
 
@@ -25,8 +26,8 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-	app.UseRequestTiming();
 
+	app.UseRequestTiming();
 }
 
 app.UseHttpsRedirection();
@@ -34,7 +35,8 @@ app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDto mov
 {
 	try
 	{
-		int results = await movieService.Create(movieDto);
+		Movie movie = MovieMapper.ToMovieFromMovieCreateDTO(movieDto);
+		int results = await movieService.Create(movie);
 
 		return results switch
 		{
@@ -58,13 +60,26 @@ app.MapGet("/api/movies", async (IMovieService movieService) =>
 
 app.MapGet("/api/movies/{id}", async (IMovieService movieService,int id) =>
 {
-	MovieGetDTO movies = await movieService.Get(id);
-	return Results.Ok(movies);
+	var movie = await movieService.Get(id);
+	if (movie == null)
+		return Results.NotFound();
+	var movieGetDTO = MovieMapper.ToMovieGetDTO(movie);
+	return Results.Ok(movieGetDTO);
 });
 
-app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, Movie movie) =>
+app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, MovieCreateDto movieDTO) =>
 {
-	movie.Id = id;
+	var movie = new Movie
+	{
+		Id = id,
+		Title = movieDTO.Title,
+		Plot = movieDTO.Plot,
+		WatchedDate = movieDTO.WatchedDate,
+		Seen = movieDTO.Seen,
+		Rating = movieDTO.Rating,
+		GenreId = movieDTO.GenreId
+	};
+
 	await movieService.Update(movie);
 	return Results.NoContent();
 });

@@ -11,6 +11,7 @@ public class MovieService : IMovieService
 {
 	private readonly ILogger<MovieService> _logger;
 	private readonly DataContext _dataContext;
+
 	public MovieService(ILogger<MovieService> logger, DataContext dataContext)
 	{
 		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -19,30 +20,31 @@ public class MovieService : IMovieService
 
 	public async Task<List<Movie>> Get()
 	{
-		List<Movie> movies = await _dataContext.Movies.Include(x => x.Genre).ToListAsync();
+		List<Movie> movies = await _dataContext.Movies
+			.Include(x => x.Genre)
+			.ToListAsync();
 		if (movies == null)
 			_logger.LogError("The movies list is empty in Get method");
-		return movies;
+		return movies!;
 	}
-	public async Task<MovieGetDTO> Get(int id)
-	{
 
-		MovieGetDTO? movieGetDTO = await _dataContext.Movies
+	public async Task<Movie> Get(int id)
+	{
+		Movie? movie = await _dataContext.Movies
 			.Include(movie => movie.Genre)
 			.Where(movie => movie.Id == id)
-			.Select(movie => MovieMapper.ToMovieGetDTO(movie))
 			.SingleOrDefaultAsync();
 
-		if (movieGetDTO == null)
+		if (movie == null)
 			_logger.LogError("The movies list is empty in Get method");
 
-		return movieGetDTO!;
+		return movie!;
 	}
-	public async Task<int> Create(MovieCreateDto _movie)
+
+	public async Task<int> Create(Movie movie)
 	{
 		try
 		{
-			var movie = MovieMapper.ToMovieFromMovieCreateDTO(_movie);
 			_dataContext.Movies.Add(movie);
 			await _dataContext.SaveChangesAsync();
 			return 201;
@@ -56,9 +58,9 @@ public class MovieService : IMovieService
 			throw new Exception($"An error has occurred: {ex}");
 		}
 	}
+
 	public async Task<bool> Delete(int id)
 	{
-
 		Movie? movieToDelete = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == id);
 		if (movieToDelete == null)
 		{
@@ -72,9 +74,9 @@ public class MovieService : IMovieService
 		_logger.LogInformation("Successfully deleted movie with ID {Id}.", id);
 		return true;
 	}
+
 	public async Task Update(Movie movie)
 	{
-
 		if (movie.Id <= 0)
 		{
 			_logger.LogError($"Invalid movie id: {movie.Id}. ID must be positive");
@@ -83,14 +85,13 @@ public class MovieService : IMovieService
 		var movieToUpdate = await _dataContext.Movies
 			.Where(x => x.Id == movie.Id)
 			.ExecuteUpdateAsync(setter => setter
-			.SetProperty(m => m .Title, movie.Title)
-			.SetProperty(m => m .Plot, movie.Plot)
-			.SetProperty(m => m .WatchedDate, movie.WatchedDate)
-			.SetProperty(m => m .Seen, movie.Seen)
+			.SetProperty(m => m.Title, movie.Title)
+			.SetProperty(m => m.Plot, movie.Plot)
+			.SetProperty(m => m.WatchedDate, movie.WatchedDate)
+			.SetProperty(m => m.Seen, movie.Seen)
 			.SetProperty(m => m.Rating, movie.Rating)
-			.SetProperty(m => m .GenreId, movie.GenreId)
+			.SetProperty(m => m.GenreId, movie.GenreId)
 		);
-
 
 		if (movieToUpdate == 0)
 		{
@@ -100,5 +101,4 @@ public class MovieService : IMovieService
 
 		_logger.LogInformation("Successfully updated movie with ID {Id}", movie.Id);
 	}
-
 }
