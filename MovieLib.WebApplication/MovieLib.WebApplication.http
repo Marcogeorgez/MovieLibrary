@@ -1,6 +1,23 @@
-@MovieLib.WebApplication_HostAddress = http://localhost:5222
+@MovieLib.WebApplication_HostAddress = https://localhost:7089
 
-GET {{MovieLib.WebApplication_HostAddress}}/weatherforecast/
-Accept: application/json
+
+GET {{MovieLib.WebApplication_HostAddress}}/api/movies
+
+###
+GET {{MovieLib.WebApplication_HostAddress}}/api/movies/2199
+###
+POST {{MovieLib.WebApplication_HostAddress}}/api/movies
+Content-Type: application/json
+
+{
+  "title":"EndPoint Explorer Api Test",
+  "WatchedDate": "2024-07-09T00:00:00",
+  "seen" : true,
+  "rating" : 10,
+  "genreId": 5
+}
+###
+
+DELETE {{MovieLib.WebApplication_HostAddress}}/api/movies/5221
 
 ###

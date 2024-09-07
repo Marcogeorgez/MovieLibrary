@@ -5,9 +5,16 @@ using MovieLib.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+	builder.Services.AddLogging();
+	builder.Logging.AddConsole();
+
 	builder.Services.AddEndpointsApiExplorer();
+
 	builder.Services.AddSwaggerGen();
+
 	builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+
+
 	builder.Services.AddScoped<IMovieService, MovieService>();
 }
 
@@ -29,7 +36,7 @@ app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDto mov
 
 		return results switch
 		{
-			200 => Results.Created($"/api/movies/{movieDto}", movieDto),
+			201 => Results.Created($"/api/movies/{movieDto}", movieDto),
 			400 => Results.BadRequest("A movie with similar name exists already!"),
 			_ => Results.StatusCode(500)
 		};
@@ -45,6 +52,11 @@ app.MapGet("/api/movies", async (IMovieService movieService) =>
 	List<Movie> movies = await movieService.Get();
 	return Results.Ok(movies);
 });
+app.MapGet("/api/movies/{id}", async (IMovieService movieService,int id) =>
+{
+	MovieGetDTO movies = await movieService.Get(id);
+	return Results.Ok(movies);
+});
 app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, Movie movie) =>
 {
 	movie.Id = id;
@@ -53,7 +65,11 @@ app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, Movie 
 });
 app.MapDelete("/api/movies/{id}", async (IMovieService movieService, int id) =>
 {
-	await movieService.Delete(id);
+	var isDeleted = await movieService.Delete(id);
+	if (!isDeleted)
+	{
+		return Results.Json(new { message = "This movie doesn't exist!" }, statusCode: 404);
+	}
 	return Results.NoContent();
 });
 
