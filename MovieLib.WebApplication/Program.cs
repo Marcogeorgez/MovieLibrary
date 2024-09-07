@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieLib.Business;
 using MovieLib.Business.Interfaces;
 using MovieLib.Domain;
+using MovieLib.WebApplication.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -27,7 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDto movieDto) =>
 {
 	try
@@ -47,22 +47,26 @@ app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDto mov
 		return Results.BadRequest($"Internal server error: {ex.Message}");
 	}
 });
+
 app.MapGet("/api/movies", async (IMovieService movieService) =>
 {
 	List<Movie> movies = await movieService.Get();
 	return Results.Ok(movies);
 });
+
 app.MapGet("/api/movies/{id}", async (IMovieService movieService,int id) =>
 {
 	MovieGetDTO movies = await movieService.Get(id);
 	return Results.Ok(movies);
 });
+
 app.MapPut("/api/movies/{id}", async (IMovieService movieService, int id, Movie movie) =>
 {
 	movie.Id = id;
 	await movieService.Update(movie);
 	return Results.NoContent();
 });
+
 app.MapDelete("/api/movies/{id}", async (IMovieService movieService, int id) =>
 {
 	var isDeleted = await movieService.Delete(id);

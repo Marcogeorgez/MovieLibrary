@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MovieLib.Business.Interfaces;
+using MovieLib.Business.Mapping;
 using MovieLib.Domain;
 
 namespace MovieLib.Business;
@@ -24,33 +25,24 @@ public class MovieService : IMovieService
 		return movies;
 	}
 	public async Task<MovieGetDTO> Get(int id)
-	{MovieGetDTO
-		? movieGetDTO = await _dataContext.Movies.Where(movie => movie.Id == id).Select(movie => new MovieGetDTO
-		{
-			Title = movie!.Title,
-			Plot = movie.Plot,
-			WatchedDate = movie.WatchedDate,
-			Seen = movie.Seen,
-			Rating = movie.Rating,
-			GenreName = movie.Genre.Name
-		}).SingleOrDefaultAsync();
+	{
+
+		MovieGetDTO? movieGetDTO = await _dataContext.Movies
+			.Include(movie => movie.Genre)
+			.Where(movie => movie.Id == id)
+			.Select(movie => MovieMapper.ToMovieGetDTO(movie))
+			.SingleOrDefaultAsync();
+
 		if (movieGetDTO == null)
 			_logger.LogError("The movies list is empty in Get method");
-		return movieGetDTO;
+
+		return movieGetDTO!;
 	}
-	public async Task<int> Create(MovieCreateDto moviee)
+	public async Task<int> Create(MovieCreateDto _movie)
 	{
 		try
 		{
-			var movie = new Movie()
-			{
-				Title = moviee.Title,
-				Plot = moviee.Plot,
-				WatchedDate = moviee.WatchedDate,
-				Seen = moviee.Seen,
-				Rating = moviee.Rating,
-				GenreId = moviee.GenreId
-			};
+			var movie = MovieMapper.ToMovieFromMovieCreateDTO(_movie);
 			_dataContext.Movies.Add(movie);
 			await _dataContext.SaveChangesAsync();
 			return 201;
@@ -85,19 +77,28 @@ public class MovieService : IMovieService
 
 		if (movie.Id <= 0)
 		{
-			_logger.LogError("Invalid movie id , can't be zero or negative !");
+			_logger.LogError($"Invalid movie id: {movie.Id}. ID must be positive");
+			throw new ArgumentException("Movie Id must be positive.", nameof(movie));
 		}
-		Movie? movieToUpdate = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == movie.Id);
-		if (movieToUpdate == null)
+		var movieToUpdate = await _dataContext.Movies
+			.Where(x => x.Id == movie.Id)
+			.ExecuteUpdateAsync(setter => setter
+			.SetProperty(m => m .Title, movie.Title)
+			.SetProperty(m => m .Plot, movie.Plot)
+			.SetProperty(m => m .WatchedDate, movie.WatchedDate)
+			.SetProperty(m => m .Seen, movie.Seen)
+			.SetProperty(m => m.Rating, movie.Rating)
+			.SetProperty(m => m .GenreId, movie.GenreId)
+		);
+
+
+		if (movieToUpdate == 0)
 		{
 			_logger.LogWarning("Attempted to update movie with ID {Id}, but it was not found.", movie.Id);
+			throw new KeyNotFoundException($"Movie with ID {movie.Id} not found.");
 		}
-		movieToUpdate.Title = movie.Title;
-		movieToUpdate.Plot = movie.Plot;
-		movieToUpdate.WatchedDate = movie.WatchedDate;
-		movieToUpdate.Seen = movie.Seen;
-		await _dataContext.SaveChangesAsync();
 
+		_logger.LogInformation("Successfully updated movie with ID {Id}", movie.Id);
 	}
 
 }
