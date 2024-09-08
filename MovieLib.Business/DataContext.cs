@@ -17,7 +17,16 @@ namespace MovieLib.Business
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Movie>().Property(x => x.GenreId).HasDefaultValue(1); // To Fix the issue where GenreId has no value.
+			modelBuilder.Entity<Genre>()
+				.HasData(
+				new Genre { Id = 1, Name = "Action" },
+				new Genre { Id = 2, Name = "Horror" },
+				new Genre { Id = 3, Name = "Humor" },
+				new Genre { Id = 4, Name = "SciFi" },
+				new Genre { Id = 5, Name = "Fantasy" },
+				new Genre { Id = 9999, Name = "Default Genre" }
+				);
+
 			modelBuilder.Entity<Movie>().HasIndex(m => m.Title).IsUnique();
 
 			modelBuilder.Entity<Movie>().HasData(new Movie()
@@ -27,8 +36,8 @@ namespace MovieLib.Business
 				WatchedDate = new DateTime(1999, 03, 31),
 				Seen = false,
 				Title = "The Matrix",
-				GenreId = 2,
-				Rating = 9
+				Rating = 9,
+				GenreIds = "1,3,5"
 			},
 			new()
 			{
@@ -38,36 +47,8 @@ namespace MovieLib.Business
 				Seen = false,
 				Title = "Up",
 				Rating = 7,
-				GenreId = 3
+				GenreIds = "1,2"
 			}
-			);
-
-			modelBuilder.Entity<Genre>().HasData(new Genre()
-			{
-				Id = 1,
-				Name = "Action"
-			},
-			new()
-			{
-				Id = 2,
-				Name = "Horror"
-			},
-			new()
-			{
-				Id = 3,
-				Name = "Humor"
-			},
-			new()
-			{
-				Id = 4,
-				Name = "SciFi"
-			},
-			new()
-			{
-				Id = 5,
-				Name = "Fantasy"
-			}
-
 			);
 		}
 	}
