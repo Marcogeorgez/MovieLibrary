@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieLib.Domain
 {
@@ -15,8 +16,18 @@ namespace MovieLib.Domain
 		public int? Rating { get; set; }
 		[MaxLength(500)]
 		public string? Plot { get; set; }
-		public int GenreId { get; set; }
-		public Genre Genre { get; set; }
+		public string GenreIds { get; set; }
+
+		[NotMapped]
+		public List<int> GenreIdList
+		{
+			get => string.IsNullOrEmpty(GenreIds) ? new List<int>() : GenreIds.Split(',').Select(int.Parse).ToList();
+			set => GenreIds = string.Join(",", value);
+		}
+
+		[NotMapped]
+		public List<string> GenreNames { get; set; } = new List<string>();
+
 		public bool Validate(out string validationMessage)
 		{
 
