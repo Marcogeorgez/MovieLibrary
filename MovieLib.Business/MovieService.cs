@@ -19,8 +19,8 @@ public class MovieService : IMovieService
 
 
 	/*
-	 Used to Fetch all relevant genres in a single query and store them in a dictionary for quick lookup.
-	 then iterate through each movie, mapping its genre IDs to genre names using the created dictionary.
+	 Used to Fetch all relevant genres in a single query and store them in a dictionary for quick lookup
+	 then iterate through each movie, mapping its genre IDs to genre names using the created dictionary
 	 */
 	public async Task PopulateGenreNames(List<Movie> movies)
 	{
@@ -29,6 +29,7 @@ public class MovieService : IMovieService
 			.Distinct()
 			.ToList();
 
+		// for fast access to hold genre names instead of querying it for every single movie , therefore querying it only once and storing them in a temporary dictionary
 		Dictionary<int, string> genresDict = await _dataContext.Genre
 		.Where(g => allGenreIds.Contains(g.Id))
 		.ToDictionaryAsync(g => g.Id, g => g.Name);
@@ -41,13 +42,14 @@ public class MovieService : IMovieService
 		}
 
 	}
+
 	// for single movie only instead
 	public async Task PopulateGenreNames(Movie movie)
 	{
 		await PopulateGenreNames(new List<Movie> { movie });
 	}
 
-	
+	// Return all movies in the db
 	public async Task<List<Movie>> Get()
 	{
 		List<Movie> movies = await _dataContext.Movies
@@ -58,7 +60,7 @@ public class MovieService : IMovieService
 		await PopulateGenreNames(movies);
 		return movies!;
 	}
-
+	// Used to add a single movie
 	public async Task<Movie> Get(int id)
 	{
 		Movie? movie = await _dataContext.Movies
@@ -91,6 +93,8 @@ public class MovieService : IMovieService
 		}
 	}
 
+
+	// Used to delete single movie
 	public async Task<bool> Delete(int id)
 	{
 		Movie? movieToDelete = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == id);
@@ -114,6 +118,7 @@ public class MovieService : IMovieService
 			_logger.LogError($"Invalid movie id: {movie.Id}. ID must be positive");
 			throw new ArgumentException("Movie Id must be positive.", nameof(movie));
 		}
+		// Mapping movie to update relevant information in db
 		var movieToUpdate = await _dataContext.Movies
 			.Where(x => x.Id == movie.Id)
 			.ExecuteUpdateAsync(setter => setter
@@ -125,6 +130,7 @@ public class MovieService : IMovieService
 			.SetProperty(m => m.GenreIds, movie.GenreIds)
 		);
 
+		// checks if nothing is returned from from db 
 		if (movieToUpdate == 0)
 		{
 			_logger.LogWarning("Attempted to update movie with ID {Id}, but it was not found.", movie.Id);

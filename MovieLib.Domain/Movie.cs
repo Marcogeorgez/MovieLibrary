@@ -18,6 +18,7 @@ namespace MovieLib.Domain
 		public string? Plot { get; set; }
 		public string GenreIds { get; set; }
 
+		// not mapped cause it is not needed in database , 
 		[NotMapped]
 		public List<int> GenreIdList
 		{
@@ -28,6 +29,7 @@ namespace MovieLib.Domain
 		[NotMapped]
 		public List<string> GenreNames { get; set; } = new List<string>();
 
+		
 		public bool Validate(out string validationMessage)
 		{
 

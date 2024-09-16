@@ -4,6 +4,7 @@ namespace MovieLib.WebApplication.Middleware;
 
 public class RequestTimingMiddleware
 {
+	// Middleware for measuring the time needed for requests.
 	private readonly RequestDelegate _next;
 	public RequestTimingMiddleware(RequestDelegate next)
 	{
@@ -24,6 +25,7 @@ public class RequestTimingMiddleware
 }
 public static class RequestTimingMiddlewareExtensions
 {
+	
 	public static IApplicationBuilder UseRequestTiming(this IApplicationBuilder builder)
 	{
 		return builder.UseMiddleware<RequestTimingMiddleware>();

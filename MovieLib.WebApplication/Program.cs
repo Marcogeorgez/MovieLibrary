@@ -15,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 	builder.Services.AddSwaggerGen();
 
-	builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+	builder.Services.AddDbContext<DataContext>(options 
+		=> options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
 
 	builder.Services.AddScoped<IMovieService, MovieService>();
@@ -27,7 +28,7 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-
+	// UseRequestTiming is for measuring the time of each request if in development mode.
 	app.UseRequestTiming();
 }
 
@@ -36,6 +37,7 @@ app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDTO mov
 {
 	try
 	{
+		
 		Movie movie = MovieMapper.ToMovieFromMovieCreateDTO(movieDto);
 		int results = await movieService.Create(movie);
 

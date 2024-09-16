@@ -6,14 +6,10 @@ namespace MovieLib.Business
 	public class DataContext : DbContext
 	{
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
-		{
-
-		}
-
+		{}
 
 		public virtual DbSet<Movie> Movies { get; set; }
 		public DbSet<Genre> Genre { get; set; }
-
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
