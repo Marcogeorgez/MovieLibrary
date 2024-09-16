@@ -25,23 +25,7 @@ public class MovieServiceTests
 	public async Task PopulateGenreNames_ShouldMapGenreNamesCorrectly()
 	{
 		// Arrange
-		// Populating Genre
-		List<Genre> genre = new List<Genre> {
-			new Genre { Id = 1, Name = "Action" },
-			new Genre { Id = 2, Name = "Horror" },
-			new Genre { Id = 3, Name = "Humor" },
-			new Genre { Id = 4, Name = "SciFi" },
-			new Genre { Id = 5, Name = "Fantasy" },
-			new Genre { Id = 9999, Name = "Default Genre" }
-		};
-
-		foreach (var genre_ in genre)
-		{
-			_dataContext.Genre.Add(genre_);
-		}
-
-		await _dataContext.SaveChangesAsync();
-
+		
 		var movie = new Movie
 		{
 			Id = 2209,
@@ -77,7 +61,11 @@ public class MovieServiceTests
 		// Arrange
 		List<Genre> genre = new List<Genre> {
 			new Genre { Id = 1, Name = "Action" },
-			new Genre { Id = 2, Name = "Horror" }
+			new Genre { Id = 2, Name = "Horror" },
+			new Genre { Id = 3, Name = "Humor" },
+			new Genre { Id = 4, Name = "SciFi" },
+			new Genre { Id = 5, Name = "Fantasy" },
+			new Genre { Id = 9999, Name = "Default Genre" }
 		};
 		foreach (var genre_ in genre)
 		{
