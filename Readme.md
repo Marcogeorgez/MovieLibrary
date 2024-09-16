@@ -4,7 +4,8 @@
 
 The Movie Library App is a Windows Forms application built to manage a personal movie library. This project serves as a learning exercise in C# development using a Minimal API with Entity Framework Core. The app features CRUD operations, where users can create, read, update, and delete movies. The WinForms app interacts with the API through HTTP requests, fetching data asynchronously using DTOs (Data Transfer Objects).
 
-This project is for learning key concepts in async/await, Object Relational Mapping (ORM), and Minimal APIs in .NET. 
+This project is for learning key concepts in async/await, Object Relational Mapping (ORM), and Minimal APIs in .NET, and unit testing and Integration testing.
+
 ## Features
 
 - **Create**: Add new movies to the library, including details such as title, release year, description, and whether you’ve seen them.
@@ -12,6 +13,10 @@ This project is for learning key concepts in async/await, Object Relational Mapp
 - **Update**: Edit movie information via the API and reflect changes in the WinForms UI.
 - **Delete**: Remove movies from the collection.
 - **Async requests**: All API calls in the  made asynchronously to provide a responsive user experience.
+- **Testing**:
+    - Developed comprehensive integration test suite with 8+ test cases for movie management service.
+    - Utilized xUnit, NSubstitute, and Entity Framework Core's in-memory database.
+    - Ensured robustness of serviecs including edge case handling resulting in improved code quality and reliability.
 
 ## Technologies Used
 
@@ -42,7 +47,7 @@ Web Application :
     
     -MovieLibBusiness: Contains services logic , datacontext and ef migrations.
     
-    -MovieLibBusiness Tests: Used for implementing unit testing.
+    -MovieLibBusiness Tests: Used for implementing unit testing & integration testing.
 
 ## Getting Started
 
