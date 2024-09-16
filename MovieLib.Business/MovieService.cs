@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MovieLib.Business.Interfaces;
-using MovieLib.Business.Mapping;
 using MovieLib.Domain;
 
 namespace MovieLib.Business;
@@ -18,25 +17,58 @@ public class MovieService : IMovieService
 		_dataContext = dataContext;
 	}
 
+
+	/*
+	 Used to Fetch all relevant genres in a single query and store them in a dictionary for quick lookup.
+	 then iterate through each movie, mapping its genre IDs to genre names using the created dictionary.
+	 */
+	public async Task PopulateGenreNames(List<Movie> movies)
+	{
+		List<int> allGenreIds = movies
+			.SelectMany(m => m.GenreIdList)
+			.Distinct()
+			.ToList();
+
+		Dictionary<int, string> genresDict = await _dataContext.Genre
+		.Where(g => allGenreIds.Contains(g.Id))
+		.ToDictionaryAsync(g => g.Id, g => g.Name);
+
+		foreach (var movie in movies)
+		{
+			movie.GenreNames = movie.GenreIdList
+				.Select(id => genresDict.TryGetValue(id, out var name) ? name : "Unknown Genre")
+				.ToList();
+		}
+
+	}
+	// for single movie only instead
+	public async Task PopulateGenreNames(Movie movie)
+	{
+		await PopulateGenreNames(new List<Movie> { movie });
+	}
+
+	
 	public async Task<List<Movie>> Get()
 	{
 		List<Movie> movies = await _dataContext.Movies
-			.Include(x => x.Genre)
-			.ToListAsync();
+			.ToListAsync();		
 		if (movies == null)
 			_logger.LogError("The movies list is empty in Get method");
+
+		await PopulateGenreNames(movies);
 		return movies!;
 	}
 
 	public async Task<Movie> Get(int id)
 	{
 		Movie? movie = await _dataContext.Movies
-			.Include(movie => movie.Genre)
 			.Where(movie => movie.Id == id)
 			.SingleOrDefaultAsync();
 
 		if (movie == null)
 			_logger.LogError("The movies list is empty in Get method");
+
+		await PopulateGenreNames(movie);
 
 		return movie!;
 	}
@@ -90,7 +122,7 @@ public class MovieService : IMovieService
 			.SetProperty(m => m.WatchedDate, movie.WatchedDate)
 			.SetProperty(m => m.Seen, movie.Seen)
 			.SetProperty(m => m.Rating, movie.Rating)
-			.SetProperty(m => m.GenreId, movie.GenreId)
+			.SetProperty(m => m.GenreIds, movie.GenreIds)
 		);
 
 		if (movieToUpdate == 0)
