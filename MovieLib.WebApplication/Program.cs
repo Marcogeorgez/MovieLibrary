@@ -44,7 +44,9 @@ app.MapPost("/api/movies", async (IMovieService movieService, MovieCreateDTO mov
 		return results switch
 		{
 			201 => Results.Created($"/api/movies/{movieDto}", movieDto),
-			400 => Results.BadRequest("A movie with similar name exists already!"),
+			400 => string.IsNullOrEmpty(movie.Title) ?
+				 Results.BadRequest("Movie Title is required!!")
+				:Results.BadRequest("A movie with similar name exists already!"),
 			_ => Results.StatusCode(500)
 		};
 

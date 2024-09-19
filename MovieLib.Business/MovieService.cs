@@ -81,6 +81,9 @@ public class MovieService : IMovieService
 	{
 		try
 		{
+			if (movie == null || string.IsNullOrEmpty(movie.Title))
+				return 400;
+				
 			_dataContext.Movies.Add(movie);
 			await _dataContext.SaveChangesAsync();
 			return 201;
