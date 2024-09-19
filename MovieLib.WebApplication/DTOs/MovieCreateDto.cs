@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DTOs;
 
-public class MovieCreateDTO
-{
-	[Required(ErrorMessage = "Title is required")]
-	public required string Title { get; set; }
-	public DateTime WatchedDate { get; set; }
-	public string? Plot { get; set; }
-	public int? Rating { get; set; }
-	public bool Seen { get; set; }
-	public string GenreIds { get; set; }
+public record MovieCreateDTO
+(
+	[property:Required(ErrorMessage = "Title is required")]
+	string Title,	
+	DateTime WatchedDate,	
+	string? Plot,	
+	int? Rating,	
+	bool Seen,	
+	string GenreIds
 
-}
+);

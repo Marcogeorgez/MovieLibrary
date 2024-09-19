@@ -1,17 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DTOs;
 
-public class MovieGetDTO
-{
-
-	[Required(ErrorMessage = "Title is required")]
-	public required string Title { get; set; }
-	public DateTime WatchedDate { get; set; }
-	public string? Plot { get; set; }
-	public int? Rating { get; set; }
-	public bool Seen { get; set; }
-	public List<string> GenreNames { get; set; } = new List<string>();
-
-}
+public record MovieGetDTO
+(
+	[property:Required(ErrorMessage = "Title is required")]
+	string Title,
+	DateTime WatchedDate,
+	string? Plot,
+	int? Rating,
+	bool Seen,
+	List<string> GenreNames
+);
