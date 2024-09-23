@@ -26,10 +26,8 @@ public class MovieService : IMovieService
 
 	public async Task PopulateGenreNames(List<Movie> movies)
 	{
-		List<int> allGenreIds = movies
-			.SelectMany(m => m.GenreIdList)
-			.Distinct()
-			.ToList();
+		HashSet<int> allGenreIds = new HashSet<int>(movies
+			.SelectMany(m => m.GenreIdList));
 
 		// for fast access to hold genre names instead of querying it for every single movie ,
 		// therefore querying it only once and storing them in a temporary dictionary
@@ -37,12 +35,12 @@ public class MovieService : IMovieService
 		.Where(g => allGenreIds.Contains(g.Id))
 		.ToDictionaryAsync(g => g.Id, g => g.Name);
 
-		foreach (var movie in movies)
+		Parallel.ForEach(movies, movie =>
 		{
 			movie.GenreNames = movie.GenreIdList
 				.Select(id => genresDict.TryGetValue(id, out var name) ? name : "Unknown Genre")
 				.ToList();
-		}
+		});
 	}
 
 	// for single movie only instead of list of movies.
