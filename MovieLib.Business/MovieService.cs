@@ -6,6 +6,7 @@ using MovieLib.Domain;
 
 namespace MovieLib.Business;
 
+///<inheritdoc/>
 public class MovieService : IMovieService
 {
 	private readonly ILogger<MovieService> _logger;
@@ -44,13 +45,15 @@ public class MovieService : IMovieService
 		}
 	}
 
-	// for single movie only instead
+	// for single movie only instead of list of movies.
 	public async Task PopulateGenreNames(Movie movie)
 	{
 		await PopulateGenreNames(new List<Movie> { movie });
 	}
 
+
 	// Return all movies in the db
+
 	public async Task<List<Movie>> Get()
 	{
 		List<Movie> movies = await _dataContext.Movies
@@ -77,6 +80,7 @@ public class MovieService : IMovieService
 		return movie!;
 	}
 
+
 	public async Task<int> Create(Movie movie)
 	{
 		try
@@ -98,7 +102,6 @@ public class MovieService : IMovieService
 		}
 	}
 
-	// Used to delete single movie
 	public async Task<bool> Delete(int id)
 	{
 		Movie? movieToDelete = await _dataContext.Movies.SingleOrDefaultAsync(x => x.Id == id);

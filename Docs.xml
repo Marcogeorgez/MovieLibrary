@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <members name="movieservice">
+    <member name="M:MovieService.Create_Movie(Movie)">
+      <summary>Adds a new movie to the database.</summary>
+      <param name="movie">The Movie object to add.</param>
+      <returns>201 if the movie was successfully created, 400 if the movie data is invalid or a duplicate error occurred.</returns>
+      <exception cref="T:System.Exception">Thrown if a database update error occurs.</exception>
+      <remarks>Checks for duplicate entries and logs the exception.</remarks>
+    </member>
+    <member name="M:MovieService.Delete(System.Int32)">
+      <summary>Deletes a movie by its ID from the database.</summary>
+      <param name="id">The unique ID of the movie to delete.</param>
+      <returns>True if the movie was successfully deleted, false if not found.</returns>
+      <remarks>Logs warnings if the movie is not found and logs success information when deleted.</remarks>
+    </member>
+    <member name="M:MovieService.Get">
+      <summary>Retrieves a list of all movies from the database.</summary>
+      <returns>A list of movie objects from the database or an empty list if no movies exist.</returns>
+      <remarks>Logs an error if the movie list is null.</remarks>
+    </member>
+    <member name="M:MovieService.Get(System.Int32)">
+      <summary>Retrieves a specific movie by its ID from the database.</summary>
+      <param name="id">The unique ID of the movie to retrieve.</param>
+      <returns>The Movie object with the specified ID, or null if not found.</returns>
+      <remarks>Logs an error if the movie is not found.</remarks>
+    </member>
+    <member name="M:MovieService.Update_Movie(Movie)">
+      <summary>Updates an existing movie's details in the database.</summary>
+      <param name="movie">The Movie object containing updated information.</param>
+      <returns>Task representing the asynchronous operation.</returns>
+      <exception cref="T:System.ArgumentException">Thrown when the movie ID is invalid.</exception>
+      <exception cref="T:System.InvalidOperationException">Thrown when the movie is not found in the database.</exception>
+      <remarks>Handles in-memory and production database updates differently. Logs updates and warnings for not found movies.</remarks>
+    </member>
+    <member name="M:MovieService.PopulateGenreNames(System.Collections.Generic.List{Movie})">
+      <summary>Populates the GenreNames property for each movie in the list.</summary>
+      <returns>An asynchronous task that fills each movie's GenreNames property with corresponding genre names, or "Unknown Genre" if a genre is not found.</returns>
+      <remarks>This method optimizes performance by querying all relevant genres once and storing them in a dictionary. It assigns names quickly by referencing the dictionary and handles missing genres by using "Unknown Genre".</remarks>
+    </member>
+  </members>
+</doc>
